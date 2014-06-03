@@ -26,11 +26,13 @@ public class MotionView extends View
 	final int textLineWidth = 2;
 	final int mcolor[] =
 	{ Color.BLUE, Color.CYAN, Color.DKGRAY, Color.BLACK, Color.GREEN, Color.MAGENTA, Color.RED, Color.GRAY, Color.YELLOW };
+	DisplayScreen mDisplayScreen;
 
 	public MotionView(Context context)
 	{
 		super(context);
 		// TODO Auto-generated constructor stub
+		mDisplayScreen = new DisplayScreen(context);
 		mPaint.setTextScaleX(scaleX);
 		mPaint.setStrokeJoin(Paint.Join.ROUND);
 		mPaint.setStrokeCap(Paint.Cap.ROUND);
@@ -143,6 +145,7 @@ public class MotionView extends View
 		{
 			float x = list.get(i).coords.x;
 			float y = list.get(i).coords.y;
+
 			float major = list.get(i).coords.touchMajor;
 			float minor = list.get(i).coords.touchMinor;
 			float orientation = list.get(i).coords.orientation;
@@ -158,14 +161,64 @@ public class MotionView extends View
 			canvas.translate(x, y);
 			canvas.rotate(orientation);
 			canvas.drawOval(rectF, mPaint);
-			canvas.restore();
+
 			mPaint.setStyle(Paint.Style.FILL);
-			mPaint.setTextSize(textSize*2);
-			canvas.drawText("" + list.get(i).properties.id, x - major, y - minor, mPaint);
+			mPaint.setTextSize(textSize * 2);
+			{
+				float posX = 0.0f;
+				float[] idWidths = new float[5];
+				int idCount = mPaint.getTextWidths("ID:" + list.get(i).properties.id, idWidths);
+				float idWidth = floatsToWidth(idWidths, idCount);
+				if ((x + major + idWidth) > mDisplayScreen.getWidthPixels())
+				{
+					posX = -major - idWidth - mPaint.getTextSize();
+				}
+				else
+				{
+					posX = major + mPaint.getTextSize();
+				}
+				canvas.drawText("ID:" + list.get(i).properties.id, posX, 0, mPaint);
+			}
 			mPaint.setStrokeWidth(textLineWidth);
 			mPaint.setTextSize(textSize);
-			canvas.drawText("x:" + (int) x + " y:" + (int) y, x + major, y - minor, mPaint);
+			{
+				float posX = 0.0f;
+				float PosY = 0.0f;
+				float[] coordsWidths = new float[20];
+				int coordsCount = mPaint.getTextWidths("x:" + (int) x + " y:" + (int) y, coordsWidths);
+				float coordsWidth = floatsToWidth(coordsWidths, coordsCount);
+				if ((x + major + coordsWidth) > mDisplayScreen.getWidthPixels())
+				{
+					posX = -major - coordsWidth - mPaint.getTextSize();
+				}
+				else
+				{
+					posX = major + mPaint.getTextSize();
+				}
+				if (y - minor - mPaint.getTextSize() < 0)
+				{
+					PosY = minor;
+				}
+				else
+				{
+					PosY = -minor;
+				}
+				canvas.drawText("x:" + (int) x + " y:" + (int) y, posX, PosY, mPaint);
+			}
+			canvas.restore();
 		}
+	}
+
+	private float floatsToWidth(float[] iWidths, int count)
+	{
+		// TODO Auto-generated method stub
+		float widths = 0.0f;
+		for (int i = 0; i < count; i++)
+		{
+			widths += iWidths[i];
+		}
+		return widths;
+
 	}
 
 	private class Pointer
