@@ -1,4 +1,4 @@
-package com.chinaykl.library.android.userinterface;
+package com.chinaykl.library.android.display;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -6,30 +6,21 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
-import android.view.View;
 
 @SuppressLint("ViewConstructor")
-public class GrayLevel extends View
+public class GrayLevel extends DisplayView
 {
-	static private int[] LCDInfo = new int[3];
-	final private int Width = 0;
-	final private int Height = 1;
-	final private int Density = 2;
 	final private int defaultlevel = 64;
-	private Paint mpaint;
+	final private Paint mpaint;
 	final private String tag = "GrayLevel";
 
 	public GrayLevel(Context context)
 	{
 		super(context);
 		// TODO Auto-generated constructor stub
-		DisplayScreen mDisplayScreen = new DisplayScreen(context);
-		LCDInfo[Width] = mDisplayScreen.getWidthPixels();
-		LCDInfo[Height] = mDisplayScreen.getHeightPixels();
-		LCDInfo[Density] = mDisplayScreen.getDensityDpi();
-		Log.i(tag, "LCD Width   :" + LCDInfo[Width]);
-		Log.i(tag, "LCD Height  :" + LCDInfo[Height]);
-		Log.i(tag, "LCD Density :" + LCDInfo[Density]);
+		Log.i(tag, "LCD Width   :" + width);
+		Log.i(tag, "LCD Height  :" + height);
+		Log.i(tag, "LCD Density :" + density);
 		mpaint = new Paint();
 		mpaint.setStrokeJoin(Paint.Join.ROUND);
 		mpaint.setStrokeCap(Paint.Cap.ROUND);
@@ -49,12 +40,12 @@ public class GrayLevel extends View
 	{
 		int i = 0;
 		float x = 0;
-		final float w = (float) (LCDInfo[Width]) / level;
+		final float w = (float) width / level;
 		for (i = 0; i < level; i++)
 		{
 			int rgb = 256 / level * i;
 			mpaint.setColor(Color.rgb(rgb, rgb, rgb));
-			canvas.drawRect(x, 0, x + w, LCDInfo[Height], mpaint);
+			canvas.drawRect(x, 0, x + w, height, mpaint);
 			x += w;
 		}
 	}
