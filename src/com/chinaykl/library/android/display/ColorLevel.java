@@ -1,4 +1,4 @@
-package com.chinaykl.library.android.userinterface;
+package com.chinaykl.library.android.display;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -6,15 +6,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
-import android.view.View;
 
 @SuppressLint("ViewConstructor")
-public class ColorLevel extends View
+public class ColorLevel extends DisplayView
 {
-	static private int[] LCDInfo = new int[3];
-	final private int Width = 0;
-	final private int Height = 1;
-	final private int Density = 2;
 	private Paint mpaint;
 	final private int defaultlevel = 256;
 	final private String tag = "ColorLevel";
@@ -23,13 +18,9 @@ public class ColorLevel extends View
 	{
 		super(context);
 		// TODO Auto-generated constructor stub
-		DisplayScreen mDisplayScreen = new DisplayScreen(context);
-		LCDInfo[Width] = mDisplayScreen.getWidthPixels();
-		LCDInfo[Height] = mDisplayScreen.getHeightPixels();
-		LCDInfo[Density] = mDisplayScreen.getDensityDpi();
-		Log.i(tag, "LCD Width   :" + LCDInfo[Width]);
-		Log.i(tag, "LCD Height  :" + LCDInfo[Height]);
-		Log.i(tag, "LCD Density :" + LCDInfo[Density]);
+		Log.i(tag, "LCD Width   :" + width);
+		Log.i(tag, "LCD Height  :" + height);
+		Log.i(tag, "LCD Density :" + density);
 		mpaint = new Paint();
 		mpaint.setStrokeJoin(Paint.Join.ROUND);
 		mpaint.setStrokeCap(Paint.Cap.ROUND);
@@ -53,8 +44,8 @@ public class ColorLevel extends View
 		int r = 0;
 		int g = 0;
 		int b = 0;
-		final float w = (float) (LCDInfo[Width]) / level;
-		final float H = (float) (LCDInfo[Height]) / level;
+		final float w = (float) (width) / level;
+		final float H = (float) (height) / level;
 		for (i = 0; i < level; i++)
 		{
 			y = 0;
@@ -63,7 +54,7 @@ public class ColorLevel extends View
 			{
 
 				g = 256 / level * j;
-				b=(int) (255*Math.sin(Math.PI/256*j));
+				b = (int) (255 * Math.sin(Math.PI / 256 * j));
 				mpaint.setColor(Color.rgb(r, g, b));
 				canvas.drawRect(x, y, x + w, y + H, mpaint);
 				y += H;
