@@ -1,4 +1,4 @@
-package com.chinaykl.library.android.userinterface;
+package com.chinaykl.library.android.display;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -6,35 +6,25 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
-import android.view.View;
 
 @SuppressLint("ViewConstructor")
-public class Pxcoordinate extends View // implements Runnable
+public class Pxcoordinate extends DisplayView // implements Runnable
 {
-	static private int[] LCDInfo = new int[3];
-	final private int Width = 0;
-	final private int Height = 1;
-	final private int Density = 2;
-	final private int n = 3;
 	final private int LineWidth = 10;
 	final private int Margins = 20;
 	final private float ArrowHeadLong = 20;
 	final private float ArrowHeadDegrees = 45;
 	final private float TextSize = 40;
-	Paint mpaint;
-	String tag = "PxCoordinate";
+	final private Paint mpaint;
+	final private String tag = "PxCoordinate";
 
 	public Pxcoordinate(Context context)
 	{
 		super(context);
 		// TODO Auto-generated constructor stub
-		DisplayScreen mDisplayScreen = new DisplayScreen(context);
-		LCDInfo[Width] = mDisplayScreen.getWidthPixels();
-		LCDInfo[Height] = mDisplayScreen.getHeightPixels();
-		LCDInfo[Density] = mDisplayScreen.getDensityDpi();
-		Log.i(tag, "LCD Width   :" + LCDInfo[Width]);
-		Log.i(tag, "LCD Height  :" + LCDInfo[Height]);
-		Log.i(tag, "LCD Density :" + LCDInfo[Density]);
+		Log.i(tag, "LCD Width   :" + width);
+		Log.i(tag, "LCD Height  :" + height);
+		Log.i(tag, "LCD Density :" + density);
 		mpaint = new Paint();
 		mpaint.setColor(Color.BLUE);
 		mpaint.setTextSize(TextSize);
@@ -57,13 +47,13 @@ public class Pxcoordinate extends View // implements Runnable
 
 	private void DrawCoordinate(Canvas canvas)
 	{
-		float ratiox = (float) (LCDInfo[Width] - Margins) / LCDInfo[Width];
-		float ratioy = (float) (LCDInfo[Height] - Margins) / LCDInfo[Height];
-		canvas.drawLine(Margins, Margins, LCDInfo[Width], Margins, mpaint);
-		canvas.drawLine(Margins, Margins, Margins, LCDInfo[Height], mpaint);
+		float ratiox = (float) (width - Margins) / width;
+		float ratioy = (float) (height - Margins) / height;
+		canvas.drawLine(Margins, Margins, width, Margins, mpaint);
+		canvas.drawLine(Margins, Margins, Margins, height, mpaint);
 		canvas.save();
 		// x
-		canvas.translate(LCDInfo[Width], Margins);
+		canvas.translate(width, Margins);
 		canvas.rotate(ArrowHeadDegrees);
 		canvas.drawLine(0, 0, -ArrowHeadLong, 0, mpaint);
 		canvas.drawLine(0, 0, 0, ArrowHeadLong, mpaint);
@@ -71,7 +61,7 @@ public class Pxcoordinate extends View // implements Runnable
 		canvas.restore();
 		canvas.save();
 		// y
-		canvas.translate(Margins, LCDInfo[Height]);
+		canvas.translate(Margins, height);
 		canvas.rotate(ArrowHeadDegrees);
 		canvas.drawLine(0, 0, -ArrowHeadLong, 0, mpaint);
 		canvas.drawLine(0, 0, 0, -ArrowHeadLong, mpaint);
@@ -86,7 +76,7 @@ public class Pxcoordinate extends View // implements Runnable
 			int i = 0;
 			int w = 0;
 			float x = 0;
-			for (i = 0; i < LCDInfo[Width]; i = i + 100)
+			for (i = 0; i < width; i = i + 100)
 			{
 				if (i > 0)
 				{
@@ -113,7 +103,7 @@ public class Pxcoordinate extends View // implements Runnable
 			int i = 0;
 			int w = 0;
 			float y = 0;
-			for (i = 0; i < LCDInfo[Height]; i = i + 100)
+			for (i = 0; i < height; i = i + 100)
 			{
 				if (i > 0)
 				{
@@ -139,27 +129,19 @@ public class Pxcoordinate extends View // implements Runnable
 
 	private void DrawInfomation(Canvas canvas)
 	{
-		int i = 0;
-		int x = LCDInfo[Width] / 3;
-		int y = LCDInfo[Height] / 4;
-		for (i = 0; i < n; i++)
-		{
-			y += TextSize * 2;
-			switch (i)
-			{
-				case Width:
-					canvas.drawText("LCD Width   :", x, y, mpaint);
-					break;
-				case Height:
-					canvas.drawText("LCD Height  :", x, y, mpaint);
-					break;
-				case Density:
-					canvas.drawText("LCD Density :", x, y, mpaint);
-					break;
-				default:
-					break;
-			}
-			canvas.drawText(String.valueOf(LCDInfo[i]), x + TextSize * 7, y, mpaint);
-		}
+		int x = width / 3;
+		int y = height / 4;
+		// Width
+		y += TextSize * 2;
+		canvas.drawText("LCD Width   :", x, y, mpaint);
+		canvas.drawText(String.valueOf(width), x + TextSize * 7, y, mpaint);
+		// Height:
+		y += TextSize * 2;
+		canvas.drawText("LCD Height  :", x, y, mpaint);
+		canvas.drawText(String.valueOf(height), x + TextSize * 7, y, mpaint);
+		// Density:
+		y += TextSize * 2;
+		canvas.drawText("LCD Density :", x, y, mpaint);
+		canvas.drawText(String.valueOf(density), x + TextSize * 7, y, mpaint);
 	}
 }
