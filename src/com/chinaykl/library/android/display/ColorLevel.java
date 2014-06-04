@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
 
 @SuppressLint("ViewConstructor")
 public class ColorLevel extends DisplayView
@@ -18,9 +17,6 @@ public class ColorLevel extends DisplayView
 	{
 		super(context);
 		// TODO Auto-generated constructor stub
-		Log.i(tag, "LCD Width   :" + width);
-		Log.i(tag, "LCD Height  :" + height);
-		Log.i(tag, "LCD Density :" + density);
 		mpaint = new Paint();
 		mpaint.setStrokeJoin(Paint.Join.ROUND);
 		mpaint.setStrokeCap(Paint.Cap.ROUND);

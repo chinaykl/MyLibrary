@@ -3,6 +3,7 @@ package com.chinaykl.library.android.display;
 import com.chinaykl.library.android.userinterface.DisplayScreen;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 
 public class DisplayView extends View
@@ -10,6 +11,7 @@ public class DisplayView extends View
 	protected int width = 0;
 	protected int height = 0;
 	protected int density = 0;
+	final private String tag = "DisplayView";
 
 	public DisplayView(Context context)
 	{
@@ -19,6 +21,9 @@ public class DisplayView extends View
 		width = mDisplayScreen.getWidthPixels();
 		height = mDisplayScreen.getHeightPixels();
 		density = mDisplayScreen.getDensityDpi();
+		Log.i(tag, "LCD Width   :" + width);
+		Log.i(tag, "LCD Height  :" + height);
+		Log.i(tag, "LCD Density :" + density);
 	}
 
 }

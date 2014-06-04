@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
 
 @SuppressLint("ViewConstructor")
 public class Pxcoordinate extends DisplayView // implements Runnable
@@ -22,9 +21,6 @@ public class Pxcoordinate extends DisplayView // implements Runnable
 	{
 		super(context);
 		// TODO Auto-generated constructor stub
-		Log.i(tag, "LCD Width   :" + width);
-		Log.i(tag, "LCD Height  :" + height);
-		Log.i(tag, "LCD Density :" + density);
 		mpaint = new Paint();
 		mpaint.setColor(Color.BLUE);
 		mpaint.setTextSize(TextSize);
