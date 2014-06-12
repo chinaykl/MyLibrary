@@ -15,25 +15,25 @@ public class GeomagneticSensor extends PositionSensors
 
 	public GeomagneticSensor(Context context)
 	{
-		super(context, Sensor.TYPE_LIGHT);
+		super(context, Sensor.TYPE_MAGNETIC_FIELD);
 		// TODO Auto-generated constructor stub
 		numOfdata = 3;
 		Log.i(tag, "Geomagnetic Sensor exist:" + exist);
 	}
 
-	public float getGravityX()
+	public float getGeomagneticX()
 	{
 		// TODO Auto-generated method stub
 		return getData(GX);
 	}
 
-	public float getGravityY()
+	public float getGeomagneticY()
 	{
 		// TODO Auto-generated method stub
 		return getData(GY);
 	}
 
-	public float getGravityZ()
+	public float getGeomagneticZ()
 	{
 		// TODO Auto-generated method stub
 		return getData(GZ);

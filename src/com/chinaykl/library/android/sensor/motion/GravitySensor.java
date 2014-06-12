@@ -15,7 +15,7 @@ public class GravitySensor extends MotionSensors
 
 	public GravitySensor(Context context)
 	{
-		super(context, Sensor.TYPE_LIGHT);
+		super(context, Sensor.TYPE_GRAVITY);
 		// TODO Auto-generated constructor stub
 		numOfdata = 3;
 		Log.i(tag, "Gravity Sensor exist:" + exist);
