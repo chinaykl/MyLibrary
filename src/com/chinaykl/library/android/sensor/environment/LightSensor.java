@@ -6,7 +6,7 @@ import android.content.Context;
 import android.hardware.Sensor;
 import android.util.Log;
 
-public class LightSensor extends EnvironmentSensors 
+public class LightSensor extends EnvironmentSensors
 {
 	final private String tag = "LightSensor";
 	static final public int LUX = 0;
@@ -16,10 +16,10 @@ public class LightSensor extends EnvironmentSensors
 		super(context, Sensor.TYPE_LIGHT);
 		// TODO Auto-generated constructor stub
 		numOfdata = 1;
-		Log.i(tag, "Light Sensor exist:"+exist);
+		Log.i(tag, "Light Sensor exist:" + exist);
 	}
-	
-	public float getlx()
+
+	public float getLx()
 	{
 		// TODO Auto-generated method stub
 		return getData(LUX);
