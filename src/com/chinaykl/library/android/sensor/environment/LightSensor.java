@@ -1,4 +1,6 @@
-package com.chinaykl.library.android.sensor;
+package com.chinaykl.library.android.sensor.environment;
+
+import com.chinaykl.library.android.sensor.EnvironmentSensors;
 
 import android.content.Context;
 import android.hardware.Sensor;
