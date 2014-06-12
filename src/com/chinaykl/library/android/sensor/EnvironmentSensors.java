@@ -3,11 +3,13 @@ package com.chinaykl.library.android.sensor;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.util.Log;
 
 public class EnvironmentSensors extends SensorBase
 {
 	private final String tag = "EnvironmentSensors";
+	private Sensor msensor;
 	private final int sensorsType[] =
 	{ 		Sensor.TYPE_AMBIENT_TEMPERATURE, 
 			Sensor.TYPE_LIGHT, 
@@ -44,5 +46,19 @@ public class EnvironmentSensors extends SensorBase
 				}
 			}
 		}
+	}
+
+	public void enable()
+	{
+		if (enable = false)
+		{
+			enable = getmSensorManager().registerListener(this, msensor, SensorManager.SENSOR_DELAY_NORMAL);
+		}
+	}
+
+	public void disable()
+	{
+		getmSensorManager().unregisterListener(this);
+		enable = false;
 	}
 }

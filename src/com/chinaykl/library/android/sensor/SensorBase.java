@@ -2,15 +2,17 @@ package com.chinaykl.library.android.sensor;
 
 import android.content.Context;
 import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
 
-public class SensorBase
+public class SensorBase implements SensorEventListener
 {
 	private final String tag = "SensorBase";
 	private SensorManager mSensorManager;
-	protected Sensor msensor;
 	protected boolean exist = false;
+	protected boolean enable = false;
 	protected int fifoMaxEventCount = 0;
 	protected int fifoReservedEventCount = 0;
 	protected float maximumRange = 0.0f;
@@ -21,8 +23,8 @@ public class SensorBase
 	protected int type = 0;
 	protected String vendor = "";
 	protected int version = 0;
-	protected float data[] = new float[10];
-	protected int max = 0;
+	private float data[] = new float[10];
+	protected int numOfdata = 0;
 
 	public SensorBase(Context context)
 	{
@@ -126,15 +128,39 @@ public class SensorBase
 		return 0;
 	}
 
-	public float getData(int item)
+	protected float getData(int item)
 	{
 		if (exist == true)
 		{
-			if (item < max)
+			if (enable == true)
 			{
-				return data[item];
+				if (item < numOfdata)
+				{
+					return data[item];
+				}
+			}
+			else
+			{
+				Log.i(tag, "NFC did not enabled");
 			}
 		}
+		Log.i(tag, "NFC not exist");
 		return 0.0f;
+	}
+
+	@Override
+	public void onSensorChanged(SensorEvent event)
+	{
+		// TODO Auto-generated method stub
+		for (int i = 0; i < numOfdata; i++)
+		{
+			data[i] = event.values[i];
+		}
+	}
+
+	@Override
+	public void onAccuracyChanged(Sensor sensor, int accuracy)
+	{
+		// TODO Auto-generated method stub
 	}
 }

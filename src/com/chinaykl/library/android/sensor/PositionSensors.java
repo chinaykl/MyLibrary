@@ -3,11 +3,14 @@ package com.chinaykl.library.android.sensor;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.util.Log;
 
 public class PositionSensors extends SensorBase
 {
 	private final String tag = "PositionSensors";
+	private Sensor msensor;
+	@SuppressLint("InlinedApi") 
 	private final int sensorsType[] =
 	{ 		Sensor.TYPE_GAME_ROTATION_VECTOR, 
 			Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR, 
@@ -45,5 +48,19 @@ public class PositionSensors extends SensorBase
 				}
 			}
 		}
+	}
+
+	public void enable()
+	{
+		if (enable = false)
+		{
+			enable = getmSensorManager().registerListener(this, msensor, SensorManager.SENSOR_DELAY_NORMAL);
+		}
+	}
+
+	public void disable()
+	{
+		getmSensorManager().unregisterListener(this);
+		enable = false;
 	}
 }

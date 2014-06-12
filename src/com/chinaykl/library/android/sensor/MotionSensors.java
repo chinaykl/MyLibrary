@@ -3,11 +3,13 @@ package com.chinaykl.library.android.sensor;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.util.Log;
 
 public class MotionSensors extends SensorBase
 {
 	private final String tag = "MotionSensors";
+	private Sensor msensor;
 	private final int sensorsType[] =
 	{ 		Sensor.TYPE_ACCELEROMETER, 
 			Sensor.TYPE_GRAVITY, 
@@ -48,5 +50,19 @@ public class MotionSensors extends SensorBase
 				}
 			}
 		}
+	}
+
+	public void enable()
+	{
+		if (enable = false)
+		{
+			enable = getmSensorManager().registerListener(this, msensor, SensorManager.SENSOR_DELAY_NORMAL);
+		}
+	}
+
+	public void disable()
+	{
+		getmSensorManager().unregisterListener(this);
+		enable = false;
 	}
 }
