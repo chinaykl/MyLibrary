@@ -6,41 +6,43 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
 
+/*
+ * Describing general information about a display, such as its size, density, and font scaling
+*/
 public class DisplayScreen
 {
-	private final String tag = "DisplayScreen";
-	private int widthPixels;
-	private int heightPixels;
-	private int densityDpi;
+	private final String TAG = "DisplayScreen";
+	private DisplayMetrics mDisplayMetrics;
 
 	@SuppressLint("NewApi")
 	public DisplayScreen(Context context)
 	{
 		// TODO Auto-generated constructor stub
-		WindowManager windowManager = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
-		DisplayMetrics mDisplayMetrics = new DisplayMetrics();
+		WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+		mDisplayMetrics = new DisplayMetrics();
 		windowManager.getDefaultDisplay().getRealMetrics(mDisplayMetrics);
-		widthPixels = mDisplayMetrics.widthPixels;
-		heightPixels = mDisplayMetrics.heightPixels;
-		densityDpi = mDisplayMetrics.densityDpi;
 
-		Log.i(tag, "Width :" + widthPixels);
-		Log.i(tag, "Height:" + heightPixels);
-		Log.i(tag, "DPI   :" + densityDpi);
+		Log.d(TAG, "density     :" + mDisplayMetrics.density);
+		Log.d(TAG, "densityDpi  :" + mDisplayMetrics.densityDpi);
+		Log.d(TAG, "heightPixels:" + mDisplayMetrics.heightPixels);
+		Log.d(TAG, "scaleDensity:" + mDisplayMetrics.scaledDensity);
+		Log.d(TAG, "widthPixels :" + mDisplayMetrics.widthPixels);
+		Log.d(TAG, "xdpi        :" + mDisplayMetrics.xdpi);
+		Log.d(TAG, "ydpi        :" + mDisplayMetrics.ydpi);
 	}
 
 	public int getWidthPixels()
 	{
-		return widthPixels;
+		return mDisplayMetrics.widthPixels;
 	}
 
 	public int getHeightPixels()
 	{
-		return heightPixels;
+		return mDisplayMetrics.heightPixels;
 	}
 
 	public int getDensityDpi()
 	{
-		return densityDpi;
+		return mDisplayMetrics.densityDpi;
 	}
 }
