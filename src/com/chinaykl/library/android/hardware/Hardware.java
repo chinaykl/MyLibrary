@@ -11,7 +11,7 @@ public class Hardware
 {
 	private static String TAG = "Hardware";
 	private static Hardware instance = null;
-	private ArrayList<FeatureInfo> featureInfos = new ArrayList();
+	private ArrayList<FeatureInfo> featureInfos = new ArrayList<FeatureInfo>();
 	private String[] sysHwFeatures =
 	{
 			// ------Audio
