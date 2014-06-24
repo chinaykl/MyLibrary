@@ -21,7 +21,7 @@ public class BatteryStatus extends BroadcastReceiver
 	
 	public void checkBatteryStatus()
 	{
-		// Are we charging / charged?
+/*		// Are we charging / charged?
 		int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
 		boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
 		                     status == BatteryManager.BATTERY_STATUS_FULL;
@@ -29,20 +29,20 @@ public class BatteryStatus extends BroadcastReceiver
 		// How are we charging?
 		int chargePlug = battery.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
 		boolean usbCharge = chargePlug == BATTERY_PLUGGED_USB;
-		boolean acCharge = chargePlug == BATTERY_PLUGGED_AC;
+		boolean acCharge = chargePlug == BATTERY_PLUGGED_AC;*/
 	}
 	
 	@Override
 	public void onReceive(Context context, Intent intent)
 	{
-		// TODO Auto-generated method stub
+/*		// TODO Auto-generated method stub
         int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
         boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
                             status == BatteryManager.BATTERY_STATUS_FULL;
     
         int chargePlug = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
         boolean usbCharge = chargePlug == BATTERY_PLUGGED_USB;
-        boolean acCharge = chargePlug == BATTERY_PLUGGED_AC;
+        boolean acCharge = chargePlug == BATTERY_PLUGGED_AC;*/
 
 	}
 }
