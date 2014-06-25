@@ -22,6 +22,7 @@ public class BatteryStatus
 	private String mTechnology;
 	private int mTemperature;
 	private int mVoltage;
+	private boolean hasData = false;
 
 	public BatteryStatus(Context context)
 	{
@@ -38,6 +39,7 @@ public class BatteryStatus
 	public Intent enableStatusCheck()
 	{
 		// TODO Auto-generated method stub
+		hasData = false;
 		return mContext.registerReceiver(mBroadcastReceiver, ifilter);
 
 	}
@@ -45,6 +47,7 @@ public class BatteryStatus
 	public void disableStatusCheck()
 	{
 		// TODO Auto-generated method stub
+		hasData = false;
 		mContext.unregisterReceiver(mBroadcastReceiver);
 
 	}
@@ -121,6 +124,7 @@ public class BatteryStatus
 			String action = intent.getAction();
 			if (action.equals(Intent.ACTION_BATTERY_CHANGED))
 			{
+				hasData = true;
 				batteryChangedReceive(intent);
 			}
 		}
@@ -150,5 +154,10 @@ public class BatteryStatus
 		Log.d(TAG, "Technology:" + mTechnology);
 		Log.d(TAG, "Temperature:" + mTemperature);
 		Log.d(TAG, "Voltage:" + mVoltage);
+	}
+
+	public boolean isHasData()
+	{
+		return hasData;
 	}
 }
