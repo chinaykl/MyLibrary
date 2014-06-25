@@ -1,19 +1,21 @@
-package com.chinaykl.library.android.hardware;
+package com.chinaykl.library.android.hardware.systeminfo;
 
 import java.util.ArrayList;
 
 import android.content.Context;
 import android.content.pm.FeatureInfo;
 
-public abstract class SystemCheck extends InfoBase
+//use to call filter with input strings
+public abstract class SystemCheck implements IInfoList
 {
 	private static String TAG = "SystemCheck";
+	InfoBase mInfoBase;
 	ArrayList<String> mfilter = new ArrayList<String>();
 
 	public SystemCheck(Context context)
 	{
 		// TODO Auto-generated constructor stub
-		super(context);
+		mInfoBase= new InfoBase(context);
 	}
 
 	public void addfilter(String[] filter)
@@ -24,13 +26,13 @@ public abstract class SystemCheck extends InfoBase
 			mfilter.add(filter[i]);
 		}
 	}
-	
+
 	public void addfilter(String filter)
 	{
 		// TODO Auto-generated method stub
 		mfilter.add(filter);
 	}
-	
+
 	public ArrayList<String> getInfo()
 	{
 		// TODO Auto-generated method stub
@@ -39,16 +41,19 @@ public abstract class SystemCheck extends InfoBase
 		for (int i = 0; i < mfilter.size(); i++)
 		{
 			String string = mfilter.get(i);
-			result.addAll(super.setMatch(string));
+			mInfoBase.setMatch(string);
+			result.addAll(mInfoBase.getMatchInfo());
 		}
 		return result;
 	}
 }
 
-abstract class InfoBase implements InfoList
+//use to filtrate the FeatureInfos with input string
+class InfoBase
 {
 	private String match;
 	private PreSystemCheck mPreSystemCheck;
+	private ArrayList<String> matchInfo=new ArrayList<String>();
 
 	public InfoBase(Context context)
 	{
@@ -56,30 +61,33 @@ abstract class InfoBase implements InfoList
 		mPreSystemCheck = PreSystemCheck.getInstance(context);
 	}
 
-	private ArrayList<String> refreshArrayList()
+	private void refreshArrayList()
 	{
-		ArrayList<String> result = new ArrayList<String>();
 		int size = mPreSystemCheck.getFeatureInfos().size();
-		result.clear();
+		matchInfo.clear();
 		for (int i = 0; i < size; i++)
 		{
 			FeatureInfo info = mPreSystemCheck.getFeatureInfos().get(i);
 			if (info.name.startsWith(match) == true)
 			{
-				result.add(info.name);
+				matchInfo.add(info.name);
 			}
 		}
-		return result;
 	}
 
-	public ArrayList<String> setMatch(String match)
+	public void setMatch(String match)
 	{
 		this.match = match;
-		return refreshArrayList();
+		refreshArrayList();
+	}
+	
+	public ArrayList<String> getMatchInfo()
+	{
+		return matchInfo;
 	}
 }
 
-interface InfoList
+interface IInfoList
 {
 	// use to check android device
 	ArrayList<String> getInfoList();

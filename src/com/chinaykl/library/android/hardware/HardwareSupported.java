@@ -2,8 +2,12 @@ package com.chinaykl.library.android.hardware;
 
 import java.util.ArrayList;
 
-import android.content.Context;
+import com.chinaykl.library.android.hardware.systeminfo.SystemCheck;
 
+import android.content.Context;
+import android.util.Log;
+
+//try to use different way to find out is this module can be tested
 public class HardwareSupported
 {
 	private static String TAG = "HardwareSupported";
@@ -35,6 +39,13 @@ public class HardwareSupported
 		result.addAll(new TouchscreenCheck(mContext).getModuleList());
 		result.addAll(new UsbCheck(mContext).getModuleList());
 		result.addAll(new WifiCheck(mContext).getModuleList());
+		
+		//for debug
+		for (int i = 0; i < result.size(); i++)
+		{
+			Log.d(TAG, i+":"+result.get(i));
+		}
+		
 		return result;
 	}
 

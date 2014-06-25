@@ -1,4 +1,4 @@
-package com.chinaykl.library.android.hardware;
+package com.chinaykl.library.android.hardware.systeminfo;
 
 import java.util.ArrayList;
 
