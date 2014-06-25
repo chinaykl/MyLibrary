@@ -11,6 +11,7 @@ import android.util.Log;
 public class HardwareSupported
 {
 	private static String TAG = "HardwareSupported";
+	private final int ITEMNUM = 16;
 	private Context mContext;
 
 	public HardwareSupported(Context context)
@@ -22,34 +23,66 @@ public class HardwareSupported
 	public ArrayList<String> hardwareCheck()
 	{
 		ArrayList<String> result = new ArrayList<String>();
-		result.add("audio");
-		result.add("battery");
-		result.addAll(new BluetoothCheck(mContext).getModuleList());
-		result.addAll(new CameraCheck(mContext).getModuleList());
-		result.addAll(new GpsCheck(mContext).getModuleList());
-		result.add("keypad");
-		result.add("lcd");
-		result.add("led");
-		result.addAll(new MicrophoneCheck(mContext).getModuleList());
-		result.addAll(new NfcCheck(mContext).getModuleList());
-		result.add("rtc");
-		result.add("sd");
-		result.addAll(new SensorCheck(mContext).getModuleList());
-		result.add("hallSensor");
-		result.addAll(new TouchscreenCheck(mContext).getModuleList());
-		result.addAll(new UsbCheck(mContext).getModuleList());
-		result.addAll(new WifiCheck(mContext).getModuleList());
-		
-		//for debug
+		ModuleCheck[] mCheck = new ModuleCheck[ITEMNUM];
+		mCheck[0] = new AudioCheck();
+		mCheck[1] = new BatteryCheck();
+		mCheck[2] = new BluetoothCheck(mContext);
+		mCheck[3] = new CameraCheck(mContext);
+		mCheck[4] = new GpsCheck(mContext);
+		mCheck[5] = new KeypadCheck();
+		mCheck[6] = new LcdCheck();
+		mCheck[7] = new LedCheck();
+		mCheck[8] = new MicrophoneCheck(mContext);
+		mCheck[9] = new NfcCheck(mContext);
+		mCheck[10] = new RtcCheck();
+		mCheck[11] = new SdCheck();
+		mCheck[12] = new SensorCheck(mContext);
+		mCheck[13] = new TouchscreenCheck(mContext);
+		mCheck[14] = new UsbCheck(mContext);
+		mCheck[15] = new WifiCheck(mContext);
+		for (int i = 0; i < ITEMNUM; i++)
+		{
+			result.addAll(mCheck[i].getModuleList());
+		}
+
+		// for debug
 		for (int i = 0; i < result.size(); i++)
 		{
-			Log.d(TAG, i+":"+result.get(i));
+			Log.d(TAG, i + ":" + result.get(i));
 		}
-		
+
 		return result;
 	}
 
-	private class BluetoothCheck implements ModuleList
+	private class AudioCheck extends ModuleCheck
+	{
+
+		@Override
+		ArrayList<String> getModuleList()
+		{
+			// TODO Auto-generated method stub
+			ArrayList<String> result = new ArrayList<String>();
+			result.add("audio");
+			return result;
+		}
+
+	}
+
+	private class BatteryCheck extends ModuleCheck
+	{
+
+		@Override
+		ArrayList<String> getModuleList()
+		{
+			// TODO Auto-generated method stub
+			ArrayList<String> result = new ArrayList<String>();
+			result.add("battery");
+			return result;
+		}
+
+	}
+
+	private class BluetoothCheck extends ModuleCheck
 	{
 		String matchString = "android.hardware.bluetooth";
 		SystemCheck mSystemCheck;
@@ -57,19 +90,7 @@ public class HardwareSupported
 		public BluetoothCheck(Context context)
 		{
 			// TODO Auto-generated constructor stub
-			mSystemCheck = new SystemCheck(context)
-			{
-				@Override
-				public ArrayList<String> getInfoList()
-				{
-					// TODO Auto-generated method stub
-					ArrayList<String> result = new ArrayList<String>();
-					addfilter(matchString);
-					result.clear();
-					result.addAll(getInfo());
-					return result;
-				}
-			};
+			mSystemCheck = new SystemCheck(context, matchString);
 		}
 
 		@Override
@@ -85,7 +106,7 @@ public class HardwareSupported
 		}
 	}
 
-	private class CameraCheck implements ModuleList
+	private class CameraCheck extends ModuleCheck
 	{
 		String matchString = "android.hardware.camera";
 		SystemCheck mSystemCheck;
@@ -93,19 +114,7 @@ public class HardwareSupported
 		public CameraCheck(Context context)
 		{
 			// TODO Auto-generated constructor stub
-			mSystemCheck = new SystemCheck(context)
-			{
-				@Override
-				public ArrayList<String> getInfoList()
-				{
-					// TODO Auto-generated method stub
-					ArrayList<String> result = new ArrayList<String>();
-					addfilter(matchString);
-					result.clear();
-					result.addAll(getInfo());
-					return result;
-				}
-			};
+			mSystemCheck = new SystemCheck(context, matchString);
 		}
 
 		@Override
@@ -121,7 +130,7 @@ public class HardwareSupported
 		}
 	}
 
-	private class GpsCheck implements ModuleList
+	private class GpsCheck extends ModuleCheck
 	{
 		String matchString = "android.hardware.location";
 		SystemCheck mSystemCheck;
@@ -129,19 +138,7 @@ public class HardwareSupported
 		public GpsCheck(Context context)
 		{
 			// TODO Auto-generated constructor stub
-			mSystemCheck = new SystemCheck(context)
-			{
-				@Override
-				public ArrayList<String> getInfoList()
-				{
-					// TODO Auto-generated method stub
-					ArrayList<String> result = new ArrayList<String>();
-					addfilter(matchString);
-					result.clear();
-					result.addAll(getInfo());
-					return result;
-				}
-			};
+			mSystemCheck = new SystemCheck(context, matchString);
 		}
 
 		@Override
@@ -157,7 +154,49 @@ public class HardwareSupported
 		}
 	}
 
-	private class MicrophoneCheck implements ModuleList
+	private class KeypadCheck extends ModuleCheck
+	{
+
+		@Override
+		ArrayList<String> getModuleList()
+		{
+			// TODO Auto-generated method stub
+			ArrayList<String> result = new ArrayList<String>();
+			result.add("keypad");
+			return result;
+		}
+
+	}
+
+	private class LcdCheck extends ModuleCheck
+	{
+
+		@Override
+		ArrayList<String> getModuleList()
+		{
+			// TODO Auto-generated method stub
+			ArrayList<String> result = new ArrayList<String>();
+			result.add("lcd");
+			return result;
+		}
+
+	}
+
+	private class LedCheck extends ModuleCheck
+	{
+
+		@Override
+		ArrayList<String> getModuleList()
+		{
+			// TODO Auto-generated method stub
+			ArrayList<String> result = new ArrayList<String>();
+			result.add("led");
+			return result;
+		}
+
+	}
+
+	private class MicrophoneCheck extends ModuleCheck
 	{
 		String matchString = "android.hardware.microphone";
 		SystemCheck mSystemCheck;
@@ -165,19 +204,7 @@ public class HardwareSupported
 		public MicrophoneCheck(Context context)
 		{
 			// TODO Auto-generated constructor stub
-			mSystemCheck = new SystemCheck(context)
-			{
-				@Override
-				public ArrayList<String> getInfoList()
-				{
-					// TODO Auto-generated method stub
-					ArrayList<String> result = new ArrayList<String>();
-					addfilter(matchString);
-					result.clear();
-					result.addAll(getInfo());
-					return result;
-				}
-			};
+			mSystemCheck = new SystemCheck(context, matchString);
 		}
 
 		@Override
@@ -193,7 +220,7 @@ public class HardwareSupported
 		}
 	}
 
-	private class NfcCheck implements ModuleList
+	private class NfcCheck extends ModuleCheck
 	{
 		String matchString = "android.hardware.nfc";
 		SystemCheck mSystemCheck;
@@ -201,19 +228,7 @@ public class HardwareSupported
 		public NfcCheck(Context context)
 		{
 			// TODO Auto-generated constructor stub
-			mSystemCheck = new SystemCheck(context)
-			{
-				@Override
-				public ArrayList<String> getInfoList()
-				{
-					// TODO Auto-generated method stub
-					ArrayList<String> result = new ArrayList<String>();
-					addfilter(matchString);
-					result.clear();
-					result.addAll(getInfo());
-					return result;
-				}
-			};
+			mSystemCheck = new SystemCheck(context, matchString);
 		}
 
 		@Override
@@ -229,7 +244,35 @@ public class HardwareSupported
 		}
 	}
 
-	private class SensorCheck implements ModuleList
+	private class RtcCheck extends ModuleCheck
+	{
+
+		@Override
+		ArrayList<String> getModuleList()
+		{
+			// TODO Auto-generated method stub
+			ArrayList<String> result = new ArrayList<String>();
+			result.add("rtc");
+			return result;
+		}
+
+	}
+
+	private class SdCheck extends ModuleCheck
+	{
+
+		@Override
+		ArrayList<String> getModuleList()
+		{
+			// TODO Auto-generated method stub
+			ArrayList<String> result = new ArrayList<String>();
+			result.add("sd");
+			return result;
+		}
+
+	}
+
+	private class SensorCheck extends ModuleCheck
 	{
 		String matchString = "android.hardware.sensor.";
 		SystemCheck mSystemCheck;
@@ -237,19 +280,7 @@ public class HardwareSupported
 		public SensorCheck(Context context)
 		{
 			// TODO Auto-generated constructor stub
-			mSystemCheck = new SystemCheck(context)
-			{
-				@Override
-				public ArrayList<String> getInfoList()
-				{
-					// TODO Auto-generated method stub
-					ArrayList<String> result = new ArrayList<String>();
-					addfilter(matchString);
-					result.clear();
-					result.addAll(getInfo());
-					return result;
-				}
-			};
+			mSystemCheck = new SystemCheck(context, matchString);
 		}
 
 		@Override
@@ -266,11 +297,12 @@ public class HardwareSupported
 					result.add(info.replaceFirst(matchString, ""));
 				}
 			}
+			result.add("hallsensor");
 			return result;
 		}
 	}
 
-	private class TouchscreenCheck implements ModuleList
+	private class TouchscreenCheck extends ModuleCheck
 	{
 		String matchString = "android.hardware.faketouch";
 		SystemCheck mSystemCheck;
@@ -278,19 +310,7 @@ public class HardwareSupported
 		public TouchscreenCheck(Context context)
 		{
 			// TODO Auto-generated constructor stub
-			mSystemCheck = new SystemCheck(context)
-			{
-				@Override
-				public ArrayList<String> getInfoList()
-				{
-					// TODO Auto-generated method stub
-					ArrayList<String> result = new ArrayList<String>();
-					addfilter(matchString);
-					result.clear();
-					result.addAll(getInfo());
-					return result;
-				}
-			};
+			mSystemCheck = new SystemCheck(context, matchString);
 		}
 
 		@Override
@@ -306,7 +326,7 @@ public class HardwareSupported
 		}
 	}
 
-	private class UsbCheck implements ModuleList
+	private class UsbCheck extends ModuleCheck
 	{
 		String matchString = "android.hardware.usb";
 		SystemCheck mSystemCheck;
@@ -314,19 +334,7 @@ public class HardwareSupported
 		public UsbCheck(Context context)
 		{
 			// TODO Auto-generated constructor stub
-			mSystemCheck = new SystemCheck(context)
-			{
-				@Override
-				public ArrayList<String> getInfoList()
-				{
-					// TODO Auto-generated method stub
-					ArrayList<String> result = new ArrayList<String>();
-					addfilter(matchString);
-					result.clear();
-					result.addAll(getInfo());
-					return result;
-				}
-			};
+			mSystemCheck = new SystemCheck(context, matchString);
 		}
 
 		@Override
@@ -342,7 +350,7 @@ public class HardwareSupported
 		}
 	}
 
-	private class WifiCheck implements ModuleList
+	private class WifiCheck extends ModuleCheck
 	{
 		String matchString = "android.hardware.wifi";
 		SystemCheck mSystemCheck;
@@ -350,19 +358,7 @@ public class HardwareSupported
 		public WifiCheck(Context context)
 		{
 			// TODO Auto-generated constructor stub
-			mSystemCheck = new SystemCheck(context)
-			{
-				@Override
-				public ArrayList<String> getInfoList()
-				{
-					// TODO Auto-generated method stub
-					ArrayList<String> result = new ArrayList<String>();
-					addfilter(matchString);
-					result.clear();
-					result.addAll(getInfo());
-					return result;
-				}
-			};
+			mSystemCheck = new SystemCheck(context, matchString);
 		}
 
 		@Override
@@ -377,10 +373,4 @@ public class HardwareSupported
 			return result;
 		}
 	}
-}
-
-interface ModuleList
-{
-	// use to check android device
-	ArrayList<String> getModuleList();
 }

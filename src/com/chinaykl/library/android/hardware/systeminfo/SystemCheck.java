@@ -6,19 +6,27 @@ import android.content.Context;
 import android.content.pm.FeatureInfo;
 
 //use to call filter with input strings
-public abstract class SystemCheck implements IInfoList
+public class SystemCheck
 {
 	private static String TAG = "SystemCheck";
-	InfoBase mInfoBase;
-	ArrayList<String> mfilter = new ArrayList<String>();
+	private InfoBase mInfoBase;
+	private ArrayList<String> mfilter = new ArrayList<String>();
 
-	public SystemCheck(Context context)
+	public SystemCheck(Context context,String[] filter)
 	{
 		// TODO Auto-generated constructor stub
 		mInfoBase= new InfoBase(context);
+		addfilter(filter);
+	}
+	
+	public SystemCheck(Context context,String filter)
+	{
+		// TODO Auto-generated constructor stub
+		mInfoBase= new InfoBase(context);
+		addfilter(filter);
 	}
 
-	public void addfilter(String[] filter)
+	private void addfilter(String[] filter)
 	{
 		// TODO Auto-generated method stub
 		for (int i = 0; i < filter.length; i++)
@@ -27,13 +35,13 @@ public abstract class SystemCheck implements IInfoList
 		}
 	}
 
-	public void addfilter(String filter)
+	private void addfilter(String filter)
 	{
 		// TODO Auto-generated method stub
 		mfilter.add(filter);
 	}
 
-	public ArrayList<String> getInfo()
+	private ArrayList<String> getInfo()
 	{
 		// TODO Auto-generated method stub
 		ArrayList<String> result = new ArrayList<String>();
@@ -44,6 +52,14 @@ public abstract class SystemCheck implements IInfoList
 			mInfoBase.setMatch(string);
 			result.addAll(mInfoBase.getMatchInfo());
 		}
+		return result;
+	}
+	
+	public ArrayList<String> getInfoList()
+	{
+		ArrayList<String> result = new ArrayList<String>();
+		result.clear();
+		result.addAll(getInfo());
 		return result;
 	}
 }
@@ -85,10 +101,4 @@ class InfoBase
 	{
 		return matchInfo;
 	}
-}
-
-interface IInfoList
-{
-	// use to check android device
-	ArrayList<String> getInfoList();
 }
