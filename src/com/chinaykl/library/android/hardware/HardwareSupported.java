@@ -2,10 +2,11 @@ package com.chinaykl.library.android.hardware;
 
 import java.util.ArrayList;
 
-import com.chinaykl.library.android.hardware.systeminfo.SystemCheck;
-
 import android.content.Context;
 import android.util.Log;
+
+import com.chinaykl.library.android.hardware.systeminfo.SystemCheck;
+import com.chinaykl.library.android.power.BatteryStatus;
 
 //try to use different way to find out is this module can be tested
 public class HardwareSupported
@@ -25,7 +26,7 @@ public class HardwareSupported
 		ArrayList<String> result = new ArrayList<String>();
 		ModuleCheck[] mCheck = new ModuleCheck[ITEMNUM];
 		mCheck[0] = new AudioCheck();
-		mCheck[1] = new BatteryCheck();
+		mCheck[1] = new BatteryCheck(mContext);
 		mCheck[2] = new BluetoothCheck(mContext);
 		mCheck[3] = new CameraCheck(mContext);
 		mCheck[4] = new GpsCheck(mContext);
@@ -70,13 +71,42 @@ public class HardwareSupported
 
 	private class BatteryCheck extends ModuleCheck
 	{
+		Context mContext;
+
+		public BatteryCheck(Context context)
+		{
+			// TODO Auto-generated constructor stub
+			mContext = context;
+		}
 
 		@Override
 		ArrayList<String> getModuleList()
 		{
 			// TODO Auto-generated method stub
+			int time = 0;
 			ArrayList<String> result = new ArrayList<String>();
-			result.add("battery");
+			BatteryStatus mStatus = new BatteryStatus(mContext);
+			while ((mStatus.isHasData() == true) || (time > 5))
+			{
+				time++;
+				try
+				{
+					Thread.sleep(200);
+				}
+				catch (InterruptedException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if (time <= 5)
+			{
+				if (mStatus.isPresent() == true)
+				{
+					result.add("battery");
+				}
+			}
+			mStatus.disableStatusCheck();
 			return result;
 		}
 
