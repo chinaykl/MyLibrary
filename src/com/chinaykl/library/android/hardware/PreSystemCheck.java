@@ -2,16 +2,15 @@ package com.chinaykl.library.android.hardware;
 
 import java.util.ArrayList;
 
-import android.R.string;
 import android.content.Context;
 import android.content.pm.FeatureInfo;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
-public class Hardware
+public class PreSystemCheck
 {
-	private static String TAG = "Hardware";
-	private static Hardware instance = null;
+	private static String TAG = "PreSystemCheck";
+	private static PreSystemCheck instance = null;
 	private ArrayList<FeatureInfo> featureInfos = new ArrayList<FeatureInfo>();
 	private String[] sysHwFeatures =
 	{
@@ -220,11 +219,17 @@ public class Hardware
 
 	};
 
-	private Hardware(Context context)
+	private PreSystemCheck(Context context)
 	{
 		// TODO Auto-generated constructor stub
+		refreshFeatureInfos(context);
+	}
+	
+	public void refreshFeatureInfos(Context context)
+	{
 		PackageManager pm = context.getPackageManager();
 		FeatureInfo[] fi = pm.getSystemAvailableFeatures();
+		featureInfos.clear();
 		for (int i = 0; i < fi.length; i++)
 		{
 			if (fi[i].name != null)
@@ -238,271 +243,23 @@ public class Hardware
 		}
 	}
 
-	public static Hardware getInstance(Context context)
+	public static PreSystemCheck getInstance(Context context)
 	{
 		if (instance == null)
 		{
-			synchronized (Hardware.class)
+			synchronized (PreSystemCheck.class)
 			{
 				if (instance == null)
 				{
-					instance = new Hardware(context);
+					instance = new PreSystemCheck(context);
 				}
 			}
 		}
 		return instance;
 	}
-
-	public ArrayList<String> hardwareCheck()
+	
+	public ArrayList<FeatureInfo> getFeatureInfos()
 	{
-		ArrayList<String> result = new ArrayList<String>();
-		result.add("audio");
-		result.add("battery");
-		result.addAll(new MBluetooth(featureInfos).getModuleList());
-		result.addAll(new MCamera(featureInfos).getModuleList());
-		result.addAll(new MGPS(featureInfos).getModuleList());
-		result.add("Keypad");
-		result.add("LCD");
-		result.add("LED");
-		result.addAll(new MMicrophone(featureInfos).getModuleList());
-		result.addAll(new MNFC(featureInfos).getModuleList());
-		result.add("RTC");
-		result.add("SD");
-		result.addAll(new MSensor(featureInfos).getModuleList());
-		result.add("HallSensor");
-		result.addAll(new MTouchscreen(featureInfos).getModuleList());
-		result.addAll(new MUSB(featureInfos).getModuleList());
-		result.addAll(new MWifi(featureInfos).getModuleList());
-		return result;
-	}
-
-	private class MBluetooth extends Module
-	{
-		String matchString = "android.hardware.bluetooth";
-
-		public MBluetooth(ArrayList<FeatureInfo> list)
-		{
-			super(list);
-			// TODO Auto-generated constructor stub
-			setMatch(matchString);
-			refreshArrayList();
-		}
-
-		@Override
-		public ArrayList<String> getModuleList()
-		{
-			// TODO Auto-generated method stub
-			ArrayList<String> result = new ArrayList<String>();
-			if (infoList.isEmpty() == false)
-			{
-				result.add("bluetooth");
-			}
-			return result;
-		}
-
-	}
-
-	private class MCamera extends Module
-	{
-		String matchString = "android.hardware.camera";
-
-		public MCamera(ArrayList<FeatureInfo> list)
-		{
-			super(list);
-			// TODO Auto-generated constructor stub
-			setMatch(matchString);
-			refreshArrayList();
-		}
-
-		@Override
-		public ArrayList<String> getModuleList()
-		{
-			// TODO Auto-generated method stub
-			ArrayList<String> result = new ArrayList<String>();
-			if (infoList.isEmpty() == false)
-			{
-				result.add("camera");
-			}
-			return result;
-		}
-	}
-
-	private class MGPS extends Module
-	{
-		String matchString = "android.hardware.location";
-
-		public MGPS(ArrayList<FeatureInfo> list)
-		{
-			super(list);
-			// TODO Auto-generated constructor stub
-			setMatch(matchString);
-			refreshArrayList();
-		}
-
-		@Override
-		public ArrayList<String> getModuleList()
-		{
-			// TODO Auto-generated method stub
-			ArrayList<String> result = new ArrayList<String>();
-			if (infoList.isEmpty() == false)
-			{
-				result.add("GPS");
-			}
-			return result;
-		}
-	}
-
-	private class MMicrophone extends Module
-	{
-		String matchString = "android.hardware.microphone";
-
-		public MMicrophone(ArrayList<FeatureInfo> list)
-		{
-			super(list);
-			// TODO Auto-generated constructor stub
-			setMatch(matchString);
-			refreshArrayList();
-		}
-
-		@Override
-		public ArrayList<String> getModuleList()
-		{
-			// TODO Auto-generated method stub
-			ArrayList<String> result = new ArrayList<String>();
-			if (infoList.isEmpty() == false)
-			{
-				result.add("Microphone");
-			}
-			return result;
-		}
-	}
-
-	private class MNFC extends Module
-	{
-		String matchString = "android.hardware.nfc";
-
-		public MNFC(ArrayList<FeatureInfo> list)
-		{
-			super(list);
-			// TODO Auto-generated constructor stub
-			setMatch(matchString);
-			refreshArrayList();
-		}
-
-		@Override
-		public ArrayList<String> getModuleList()
-		{
-			// TODO Auto-generated method stub
-			ArrayList<String> result = new ArrayList<String>();
-			if (infoList.isEmpty() == false)
-			{
-				result.add("NFC");
-			}
-			return result;
-		}
-	}
-
-	private class MSensor extends Module
-	{
-		String matchString = "android.hardware.sensor.";
-
-		public MSensor(ArrayList<FeatureInfo> list)
-		{
-			super(list);
-			// TODO Auto-generated constructor stub
-			setMatch(matchString);
-			refreshArrayList();
-		}
-
-		@Override
-		public ArrayList<String> getModuleList()
-		{
-			// TODO Auto-generated method stub
-			ArrayList<String> result = new ArrayList<String>();
-			for (int i = 0; i < infoList.size(); i++)
-			{
-				FeatureInfo info = infoList.get(i);
-				if (info.name.startsWith(matchString) == true)
-				{
-					result.add(info.name.replaceFirst(matchString, ""));
-				}
-			}
-			return result;
-		}
-	}
-
-	private class MTouchscreen extends Module
-	{
-		String matchString = "android.hardware.faketouch";
-
-		public MTouchscreen(ArrayList<FeatureInfo> list)
-		{
-			super(list);
-			// TODO Auto-generated constructor stub
-			setMatch(matchString);
-			refreshArrayList();
-		}
-
-		@Override
-		public ArrayList<String> getModuleList()
-		{
-			// TODO Auto-generated method stub
-			ArrayList<String> result = new ArrayList<String>();
-			if (infoList.isEmpty() == false)
-			{
-				result.add("Touchscreen");
-			}
-			return result;
-		}
-	}
-
-	private class MUSB extends Module
-	{
-		String matchString = "android.hardware.usb";
-
-		public MUSB(ArrayList<FeatureInfo> list)
-		{
-			super(list);
-			// TODO Auto-generated constructor stub
-			setMatch(matchString);
-			refreshArrayList();
-		}
-
-		@Override
-		public ArrayList<String> getModuleList()
-		{
-			// TODO Auto-generated method stub
-			ArrayList<String> result = new ArrayList<String>();
-			if (infoList.isEmpty() == false)
-			{
-				result.add("USB");
-			}
-			return result;
-		}
-	}
-
-	private class MWifi extends Module
-	{
-		String matchString = "android.hardware.wifi";
-
-		public MWifi(ArrayList<FeatureInfo> list)
-		{
-			super(list);
-			// TODO Auto-generated constructor stub
-			setMatch(matchString);
-			refreshArrayList();
-		}
-
-		@Override
-		public ArrayList<String> getModuleList()
-		{
-			// TODO Auto-generated method stub
-			ArrayList<String> result = new ArrayList<String>();
-			if (infoList.isEmpty() == false)
-			{
-				result.add("Wifi");
-			}
-			return result;
-		}
+		return featureInfos;
 	}
 }
